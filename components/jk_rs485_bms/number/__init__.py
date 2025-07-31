@@ -99,7 +99,7 @@ NUMBERS = {
     CONF_CELL_OVERVOLTAGE_PROTECTION_RECOVERY: [0x0010, 0x10, 0x04, 3, 0],
     CONF_CELL_BALANCING_TRIGGER_VOLTAGE: [0x0014, 0x10, 0x04, 3, 0],
     CONF_CELL_SOC100_VOLTAGE: [0x0018, 0x10, 0x04, 3, 0],
-    CONF_CELL_SOC0_VOLTAGE: [0x001C, 0x04, 0x04, 3, 0],
+    CONF_CELL_SOC0_VOLTAGE: [0x001C, 0x10, 0x04, 3, 0],
     CONF_CELL_REQUEST_CHARGE_VOLTAGE: [0x0020, 0x10, 0x04, 3, 0],
     CONF_CELL_REQUEST_FLOAT_VOLTAGE: [0x0024, 0x10, 0x04, 3, 0],
     CONF_CELL_POWER_OFF_VOLTAGE: [0x0028, 0x10, 0x04, 3, 0],
@@ -131,21 +131,19 @@ NUMBERS = {
 JkRS485BmsNumber = jk_rs485_bms_ns.class_("JkRS485BmsNumber", number.Number, cg.Component)
 
 # Base schema for numbers
-BASE_NUMBER_SCHEMA = number.schema(
-    number.Number,
-    icon=ICON_EMPTY,
-    step=0.01,
-    unit_of_measurement=UNIT_VOLT,
-    mode="BOX",
-    entity_category=cv.ENTITY_CATEGORIES.CONFIG,
-    device_class=DEVICE_CLASS_EMPTY,
-).extend(cv.COMPONENT_SCHEMA).extend({
+JK_RS485_NUMBER_SCHEMA = number.NUMBER_SCHEMA.extend({
     cv.GenerateID(): cv.declare_id(JkRS485BmsNumber),
-})
+    cv.Optional(CONF_ICON, default=ICON_EMPTY): cv.icon,
+    cv.Optional(CONF_STEP, default=0.01): cv.float_,
+    cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_VOLT): cv.string_strict,
+    cv.Optional(CONF_MODE, default="BOX"): cv.enum(number.NUMBER_MODES, upper=True),
+    cv.Optional(CONF_ENTITY_CATEGORY, default="config"): cv.entity_category,
+    cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_EMPTY): cv.string_strict,
+}).extend(cv.COMPONENT_SCHEMA)
 
-# Helper function to create number schemas
+# Helper functions to create number schemas
 def voltage_schema(min_value=1.2, max_value=4.350, step=0.001, icon=ICON_EMPTY):
-    return BASE_NUMBER_SCHEMA.extend({
+    return JK_RS485_NUMBER_SCHEMA.extend({
         cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_VOLT): cv.string_strict,
         cv.Optional(CONF_ICON, default=icon): cv.icon,
         cv.Optional(CONF_MIN_VALUE, default=min_value): cv.float_,
@@ -155,7 +153,7 @@ def voltage_schema(min_value=1.2, max_value=4.350, step=0.001, icon=ICON_EMPTY):
     })
 
 def current_schema(min_value=0.0, max_value=200.0, step=0.001, icon=ICON_CURRENT_DC):
-    return BASE_NUMBER_SCHEMA.extend({
+    return JK_RS485_NUMBER_SCHEMA.extend({
         cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_AMPERE): cv.string_strict,
         cv.Optional(CONF_ICON, default=icon): cv.icon,
         cv.Optional(CONF_MIN_VALUE, default=min_value): cv.float_,
@@ -165,7 +163,7 @@ def current_schema(min_value=0.0, max_value=200.0, step=0.001, icon=ICON_CURRENT
     })
 
 def time_schema(unit=UNIT_SECONDS, min_value=0.0, max_value=3600.0, step=1.0, icon=ICON_CLOCK):
-    return BASE_NUMBER_SCHEMA.extend({
+    return JK_RS485_NUMBER_SCHEMA.extend({
         cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=unit): cv.string_strict,
         cv.Optional(CONF_ICON, default=icon): cv.icon,
         cv.Optional(CONF_MIN_VALUE, default=min_value): cv.float_,
@@ -175,7 +173,7 @@ def time_schema(unit=UNIT_SECONDS, min_value=0.0, max_value=3600.0, step=1.0, ic
     })
 
 def temperature_schema(min_value=0.0, max_value=200.0, step=0.1, icon=ICON_HIGH_TEMPERATURE):
-    return BASE_NUMBER_SCHEMA.extend({
+    return JK_RS485_NUMBER_SCHEMA.extend({
         cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_CELSIUS): cv.string_strict,
         cv.Optional(CONF_ICON, default=icon): cv.icon,
         cv.Optional(CONF_MIN_VALUE, default=min_value): cv.float_,
@@ -215,14 +213,14 @@ CONFIG_SCHEMA = JK_RS485_BMS_COMPONENT_SCHEMA.extend({
     cv.Optional(CONF_CHARGING_LOWTEMPERATURE_PROTECTION_RECOVERY): temperature_schema(min_value=-100.0, icon=ICON_LOW_TEMPERATURE),
     cv.Optional(CONF_MOS_OVERTEMPERATURE_PROTECTION): temperature_schema(),
     cv.Optional(CONF_MOS_OVERTEMPERATURE_PROTECTION_RECOVERY): temperature_schema(),
-    cv.Optional(CONF_CELL_COUNT_SETTINGS): BASE_NUMBER_SCHEMA.extend({
+    cv.Optional(CONF_CELL_COUNT_SETTINGS): JK_RS485_NUMBER_SCHEMA.extend({
         cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_EMPTY): cv.string_strict,
         cv.Optional(CONF_ICON, default=ICON_EMPTY): cv.icon,
         cv.Optional(CONF_MIN_VALUE, default=3.0): cv.float_,
         cv.Optional(CONF_MAX_VALUE, default=24.0): cv.float_,
         cv.Optional(CONF_STEP, default=1.0): cv.float_,
     }),
-    cv.Optional(CONF_BATTERY_CAPACITY_TOTAL_SETTINGS): BASE_NUMBER_SCHEMA.extend({
+    cv.Optional(CONF_BATTERY_CAPACITY_TOTAL_SETTINGS): JK_RS485_NUMBER_SCHEMA.extend({
         cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_AMPERE_HOURS): cv.string_strict,
         cv.Optional(CONF_ICON, default=ICON_BATTERY_CAPACITY_TOTAL_SETTING): cv.icon,
         cv.Optional(CONF_MIN_VALUE, default=0.0): cv.float_,
@@ -232,7 +230,7 @@ CONFIG_SCHEMA = JK_RS485_BMS_COMPONENT_SCHEMA.extend({
     cv.Optional(CONF_PRECHARGING_TIME_FROM_DISCHARGE): time_schema(),
     cv.Optional(CONF_CELL_REQUEST_CHARGE_VOLTAGE_TIME): time_schema(unit=UNIT_HOURS, max_value=255.0, step=0.1),
     cv.Optional(CONF_CELL_REQUEST_FLOAT_VOLTAGE_TIME): time_schema(unit=UNIT_HOURS, max_value=255.0, step=0.1),
-    cv.Optional(CONF_VOLTAGE_CALIBRATION): BASE_NUMBER_SCHEMA.extend({
+    cv.Optional(CONF_VOLTAGE_CALIBRATION): JK_RS485_NUMBER_SCHEMA.extend({
         cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_VOLT): cv.string_strict,
         cv.Optional(CONF_MIN_VALUE, default=10.0): cv.float_,
         cv.Optional(CONF_MAX_VALUE, default=100.0): cv.float_,
