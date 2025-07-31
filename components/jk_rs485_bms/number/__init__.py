@@ -212,7 +212,7 @@ NUMBERS = {
 JkRS485BmsNumber = jk_rs485_bms_ns.class_("JkRS485BmsNumber", number.Number, cg.Component)
 
 JK_RS485_NUMBER_SCHEMA = number.number_schema(
-    {
+    
         cv.GenerateID(): cv.declare_id(JkRS485BmsNumber),
         cv.Optional(CONF_ICON, default=ICON_EMPTY): cv.icon,
         cv.Optional(CONF_STEP, default=0.01): cv.float_,
@@ -222,7 +222,7 @@ JK_RS485_NUMBER_SCHEMA = number.number_schema(
             CONF_ENTITY_CATEGORY, default=ENTITY_CATEGORY_CONFIG
         ): cv.entity_category,
         cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_EMPTY): cv.string_strict,
-    }
+    
 ).extend(cv.COMPONENT_SCHEMA)
 
 CONFIG_SCHEMA = JK_RS485_BMS_COMPONENT_SCHEMA.extend(
