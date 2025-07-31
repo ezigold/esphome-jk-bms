@@ -1,8 +1,6 @@
 import esphome.codegen as cg
 from esphome.components import number
 from esphome.components.number import Number
-class JK_RS485Number(Number):
-    pass
 import esphome.config_validation as cv
 from esphome.const import (
     CONF_ENTITY_CATEGORY,
