@@ -20,7 +20,6 @@ from esphome.const import (
     DEVICE_CLASS_VOLTAGE,
     DEVICE_CLASS_CURRENT,
     DEVICE_CLASS_TEMPERATURE,
-    DEVICE_CLASS_EMPTY,
 )
 
 from .. import CONF_JK_RS485_BMS_ID, JK_RS485_BMS_COMPONENT_SCHEMA, jk_rs485_bms_ns
@@ -34,6 +33,7 @@ UNIT_MICROSECONDS = "µs"
 UNIT_HOURS = "h"
 UNIT_OHM = "Ω"
 UNIT_AMPERE_HOURS = "Ah"
+UNIT_EMPTY = ""
 
 # Configuration constants
 CONF_CELL_SMART_SLEEP_VOLTAGE = "cell_smart_sleep_voltage"
