@@ -211,19 +211,21 @@ NUMBERS = {
 
 JkRS485BmsNumber = jk_rs485_bms_ns.class_("JkRS485BmsNumber", number.Number, cg.Component)
 
-JK_RS485_NUMBER_SCHEMA = number.number_schema.extend(
+JK_RS485_NUMBER_SCHEMA = number.number_schema(
+    min_value=cv.Optional("min_value", default=0.0),
+    max_value=cv.Optional("max_value", default=100.0),
+    step=cv.Optional("step", default=0.01),
+    unit_of_measurement=cv.Optional("unit_of_measurement", default=UNIT_VOLT),
+    icon=cv.Optional("icon", default=ICON_EMPTY),
+    mode=cv.Optional("mode", default=number.NumberMode.BOX),
+    entity_category=cv.Optional("entity_category", default=ENTITY_CATEGORY_CONFIG),
+    device_class=cv.Optional("device_class", default=DEVICE_CLASS_EMPTY),
+).extend(
     {
         cv.GenerateID(): cv.declare_id(JkRS485BmsNumber),
-        cv.Optional(CONF_ICON, default=ICON_EMPTY): cv.icon,
-        cv.Optional(CONF_STEP, default=0.01): cv.float_,
-        cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_VOLT): cv.string_strict,
-        cv.Optional(CONF_MODE, default="BOX"): cv.enum(number.NUMBER_MODES, upper=True),
-        cv.Optional(
-            CONF_ENTITY_CATEGORY, default=ENTITY_CATEGORY_CONFIG
-        ): cv.entity_category,
-        cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_EMPTY): cv.string_strict,
     }
 ).extend(cv.COMPONENT_SCHEMA)
+
 
 CONFIG_SCHEMA = JK_RS485_BMS_COMPONENT_SCHEMA.extend(
     {
