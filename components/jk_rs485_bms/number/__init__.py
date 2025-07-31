@@ -212,17 +212,18 @@ NUMBERS = {
 JkRS485BmsNumber = jk_rs485_bms_ns.class_("JkRS485BmsNumber", number.Number, cg.Component)
 
 JK_RS485_NUMBER_SCHEMA = number.number_schema(
-    min_value=0.0,  # set sane defaults (you can override them)
+    min_value=0.0,
     max_value=100.0,
     step=0.01,
-    unit_of_measurement=UNIT_VOLT,
+    unit_of_measurement=UNIT_EMPTY,
     icon=ICON_EMPTY,
-    mode=number.NumberMode.BOX,
+    mode=number.NumberMode.AUTO,
     entity_category=ENTITY_CATEGORY_CONFIG,
     device_class=DEVICE_CLASS_EMPTY,
 ).extend(
     {
         cv.GenerateID(): cv.declare_id(JkRS485BmsNumber),
+        cv.GenerateID(CONF_PARENT_ID): cv.use_id(JkRs485),
     }
 ).extend(cv.COMPONENT_SCHEMA)
 
