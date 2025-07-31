@@ -211,7 +211,7 @@ NUMBERS = {
 
 JkRS485BmsNumber = jk_rs485_bms_ns.class_("JkRS485BmsNumber", number.Number, cg.Component)
 
-JK_RS485_NUMBER_SCHEMA = number.number_schema(
+JK_RS485_NUMBER_SCHEMA = number.number_schema.extend(
     {
         cv.GenerateID(): cv.declare_id(JkRS485BmsNumber),
         cv.Optional(CONF_ICON, default=ICON_EMPTY): cv.icon,
@@ -614,6 +614,3 @@ async def to_code(config):
             cg.add(var.set_type(param_config[4]))
 
             #[0x0000, 0x10,   0x04,  3,  0],
-
-        
-
