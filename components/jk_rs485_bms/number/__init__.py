@@ -212,7 +212,7 @@ NUMBERS = {
 JkRS485BmsNumber = jk_rs485_bms_ns.class_("JkRS485BmsNumber", number.Number, cg.Component)
 
 JK_RS485_NUMBER_SCHEMA = (
-    number.number_schema(number.NumberSchema())
+    number.number_schema(number.number_schema())
     .min_value(0.0)
     .max_value(100.0)
     .step(0.01)
