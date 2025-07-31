@@ -211,12 +211,12 @@ NUMBERS = {
 
 JkRS485BmsNumber = jk_rs485_bms_ns.class_("JkRS485BmsNumber", number.Number, cg.Component)
 
-JK_RS485_NUMBER_SCHEMA = number.number_schema(
-    min_value=0.0,
-    max_value=100.0,
-    step=0.01,
-    unit_of_measurement=UNIT_EMPTY,
-    icon=ICON_EMPTY,
+JK_RS485_NUMBER_SCHEMA = number.number_schema(number.NumberSchema())
+    .min_value(0)
+    .max_value(100)
+    .step(1)
+    .unit("V")
+    .icon("mdi:flash")
     mode=number.NumberMode.AUTO,
     entity_category=ENTITY_CATEGORY_CONFIG,
     device_class=DEVICE_CLASS_EMPTY,
