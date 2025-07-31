@@ -1,5 +1,8 @@
 import esphome.codegen as cg
 from esphome.components import number
+from esphome.components.number import Number
+class JK_RS485Number(Number):
+    pass
 import esphome.config_validation as cv
 from esphome.const import (
     CONF_ENTITY_CATEGORY,
@@ -210,9 +213,7 @@ NUMBERS = {
 }
 
 JkRS485BmsNumber = jk_rs485_bms_ns.class_("JkRS485BmsNumber", number.Number, cg.Component)
-
-JK_RS485_NUMBER_SCHEMA = (
-    number.number_schema(number.number_schema())
+JK_RS485_NUMBER_SCHEMA = number.number_schema(JK_RS485Number).extend({
     .min_value(0.0)
     .max_value(100.0)
     .step(0.01)
@@ -224,8 +225,6 @@ JK_RS485_NUMBER_SCHEMA = (
     .extend({cv.GenerateID(): cv.declare_id(JkRS485BmsNumber)})
     .extend(cv.COMPONENT_SCHEMA)
 )
-
-
 
 CONFIG_SCHEMA = JK_RS485_BMS_COMPONENT_SCHEMA.extend(
     {
