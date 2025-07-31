@@ -15,7 +15,6 @@ from esphome.const import (
     UNIT_VOLT,
     UNIT_AMPERE,
     UNIT_CELSIUS,
-    UNIT_SECONDS,
     UNIT_PERCENT,
     UNIT_WATT,
     DEVICE_CLASS_VOLTAGE,
@@ -30,6 +29,7 @@ DEPENDENCIES = ["jk_rs485_bms"]
 CODEOWNERS = ["@syssi", "@txubelaxu"]
 
 # Custom units
+UNIT_SECONDS = "s"
 UNIT_MICROSECONDS = "µs"
 UNIT_HOURS = "h"
 UNIT_OHM = "Ω"
