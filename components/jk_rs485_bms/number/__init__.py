@@ -10,16 +10,12 @@ from esphome.const import (
     CONF_UNIT_OF_MEASUREMENT,
     CONF_MODE,
     CONF_ENTITY_CATEGORY,
-    CONF_DEVICE_CLASS,
     ICON_EMPTY,
     UNIT_VOLT,
     UNIT_AMPERE,
     UNIT_CELSIUS,
     UNIT_PERCENT,
     UNIT_WATT,
-    DEVICE_CLASS_VOLTAGE,
-    DEVICE_CLASS_CURRENT,
-    DEVICE_CLASS_TEMPERATURE,
 )
 
 from .. import CONF_JK_RS485_BMS_ID, JK_RS485_BMS_COMPONENT_SCHEMA, jk_rs485_bms_ns
@@ -129,7 +125,7 @@ JK_RS485_NUMBER_SCHEMA = number.NUMBER_SCHEMA.extend({
     cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_VOLT): cv.string_strict,
     cv.Optional(CONF_MODE, default="BOX"): cv.enum(number.NUMBER_MODES, upper=True),
     cv.Optional(CONF_ENTITY_CATEGORY, default="config"): cv.entity_category,
-    cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_EMPTY): cv.string_strict,
+    cv.Optional(CONF_DEVICE_CLASS, default=""): cv.string_strict,
 }).extend(cv.COMPONENT_SCHEMA)
 
 # Helper functions to create number schemas
@@ -140,7 +136,7 @@ def voltage_schema(min_value=1.2, max_value=4.350, step=0.001, icon=ICON_EMPTY):
         cv.Optional(CONF_MIN_VALUE, default=min_value): cv.float_,
         cv.Optional(CONF_MAX_VALUE, default=max_value): cv.float_,
         cv.Optional(CONF_STEP, default=step): cv.float_,
-        cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_VOLTAGE): cv.string_strict,
+        cv.Optional(CONF_DEVICE_CLASS, default="voltage"): cv.string_strict,
     })
 
 def current_schema(min_value=0.0, max_value=200.0, step=0.001, icon=ICON_CURRENT_DC):
@@ -150,7 +146,7 @@ def current_schema(min_value=0.0, max_value=200.0, step=0.001, icon=ICON_CURRENT
         cv.Optional(CONF_MIN_VALUE, default=min_value): cv.float_,
         cv.Optional(CONF_MAX_VALUE, default=max_value): cv.float_,
         cv.Optional(CONF_STEP, default=step): cv.float_,
-        cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_CURRENT): cv.string_strict,
+        cv.Optional(CONF_DEVICE_CLASS, default="current"): cv.string_strict,
     })
 
 def time_schema(unit=UNIT_SECONDS, min_value=0.0, max_value=3600.0, step=1.0, icon=ICON_CLOCK):
@@ -160,7 +156,7 @@ def time_schema(unit=UNIT_SECONDS, min_value=0.0, max_value=3600.0, step=1.0, ic
         cv.Optional(CONF_MIN_VALUE, default=min_value): cv.float_,
         cv.Optional(CONF_MAX_VALUE, default=max_value): cv.float_,
         cv.Optional(CONF_STEP, default=step): cv.float_,
-        cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_EMPTY): cv.string_strict,
+        cv.Optional(CONF_DEVICE_CLASS, default=""): cv.string_strict,
     })
 
 def temperature_schema(min_value=0.0, max_value=200.0, step=0.1, icon=ICON_HIGH_TEMPERATURE):
@@ -170,7 +166,7 @@ def temperature_schema(min_value=0.0, max_value=200.0, step=0.1, icon=ICON_HIGH_
         cv.Optional(CONF_MIN_VALUE, default=min_value): cv.float_,
         cv.Optional(CONF_MAX_VALUE, default=max_value): cv.float_,
         cv.Optional(CONF_STEP, default=step): cv.float_,
-        cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_TEMPERATURE): cv.string_strict,
+        cv.Optional(CONF_DEVICE_CLASS, default="temperature"): cv.string_strict,
     })
 
 # Configuration schema
@@ -226,7 +222,7 @@ CONFIG_SCHEMA = JK_RS485_BMS_COMPONENT_SCHEMA.extend({
         cv.Optional(CONF_MIN_VALUE, default=10.0): cv.float_,
         cv.Optional(CONF_MAX_VALUE, default=100.0): cv.float_,
         cv.Optional(CONF_STEP, default=0.01): cv.float_,
-        cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_VOLTAGE): cv.string_strict,
+        cv.Optional(CONF_DEVICE_CLASS, default="voltage"): cv.string_strict,
     }),
     cv.Optional(CONF_CURRENT_CALIBRATION): current_schema(max_value=100.0),
 })
