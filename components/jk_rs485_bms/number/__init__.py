@@ -1,6 +1,5 @@
 import esphome.codegen as cg
 from esphome.components import number
-from esphome.components.number import Number
 import esphome.config_validation as cv
 from esphome.const import (
     CONF_ENTITY_CATEGORY,
@@ -34,10 +33,8 @@ from esphome.const import (
     UNIT_WATT,
 )
 
-#from .. import CONF_JK_BMS_BLE_ID, JK_BMS_BLE_COMPONENT_SCHEMA, jk_bms_ble_ns
 from .. import CONF_JK_RS485_BMS_ID, JK_RS485_BMS_COMPONENT_SCHEMA, jk_rs485_bms_ns
 
-#DEPENDENCIES = ["jk_bms_ble"]
 DEPENDENCIES = ["jk_rs485_bms"]
 
 CODEOWNERS = ["@syssi","@txubelaxu"]
@@ -210,16 +207,19 @@ NUMBERS = {
         #  02.10.15.04.00.01.02.00.01.36.25
 }
 
+# Define your Number class properly by subclassing number.Number and cg.Component
 JkRS485BmsNumber = jk_rs485_bms_ns.class_("JkRS485BmsNumber", number.Number, cg.Component)
-JK_RS485_NUMBER_SCHEMA = number.number_schema(JK_RS485Number).extend({
+
+# Use number.number_schema (not number.NUMBER_SCHEMA) for schema base
+JK_RS485_NUMBER_SCHEMA = number.number_schema(
+).extend(
+    {
         cv.GenerateID(): cv.declare_id(JkRS485BmsNumber),
         cv.Optional(CONF_ICON, default=ICON_EMPTY): cv.icon,
         cv.Optional(CONF_STEP, default=0.01): cv.float_,
         cv.Optional(CONF_UNIT_OF_MEASUREMENT, default=UNIT_VOLT): cv.string_strict,
         cv.Optional(CONF_MODE, default="BOX"): cv.enum(number.NUMBER_MODES, upper=True),
-        cv.Optional(
-            CONF_ENTITY_CATEGORY, default=ENTITY_CATEGORY_CONFIG
-        ): cv.entity_category,
+        cv.Optional(CONF_ENTITY_CATEGORY, default=ENTITY_CATEGORY_CONFIG): cv.entity_category,
         cv.Optional(CONF_DEVICE_CLASS, default=DEVICE_CLASS_EMPTY): cv.string_strict,
     }
 ).extend(cv.COMPONENT_SCHEMA)
